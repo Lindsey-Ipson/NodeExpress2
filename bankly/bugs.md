@@ -14,7 +14,7 @@ The SQL Update query is returning *, which can lead to security breaches as if a
 
 ## Bug #4
 
-The user patch route is only allowing admins to update user info, when users are supposed ot be abel to update their own info. This is because `requireAdmin`  is included as a middleware in that route which throws an error and passes to the error handler when the user is other than a admin
+The user patch route is only allowing admins to update user info, when users are supposed to be able to update their own info. This is because `requireAdmin`  is included as a middleware in that route which throws an error and passes to the error handler when the user is other than a admin
 
 ## Bug #5
 

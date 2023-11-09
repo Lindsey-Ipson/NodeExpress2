@@ -5,6 +5,8 @@ const express = require('express');
 const router = new express.Router();
 const ExpressError = require('../helpers/expressError');
 const { authUser, requireLogin, requireAdmin } = require('../middleware/auth');
+const jsonschema = require('jsonschema');
+const userUpdateSchema = require('../schemas/userUpdate.json');
 
 /** GET /
  *
@@ -75,6 +77,15 @@ router.patch('/:username', authUser, requireLogin, requireAdmin, async function(
     // get fields to change; remove token so we don't try to change it
     let fields = { ...req.body };
     delete fields._token;
+
+    // Fix bug #2 - no data validation for updating users - add JSON schema validation for updating user
+    const validator = jsonschema.validate(fields, userUpdateSchema);
+
+    if (!validator.valid) {
+      const errs = validator.errors.map(e => e.stack);
+      throw new ExpressError(errs, 400);
+    }
+
     // Fix bug #2 - User.update was not awaited and returning a promise pending when updating user
     let user = await User.update(req.params.username, fields);
     return res.json({ user });
