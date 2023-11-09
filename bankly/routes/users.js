@@ -4,7 +4,7 @@ const User = require('../models/user');
 const express = require('express');
 const router = new express.Router();
 const ExpressError = require('../helpers/expressError');
-const { authUser, requireLogin, requireAdmin } = require('../middleware/auth');
+const { authUser, requireLogin, requireAdmin, ensureAdminOrCorrectUser } = require('../middleware/auth');
 const jsonschema = require('jsonschema');
 const userUpdateSchema = require('../schemas/userUpdate.json');
 
@@ -65,7 +65,7 @@ router.get('/:username', authUser, requireLogin, async function(
  *
  */
 
-router.patch('/:username', authUser, requireLogin, requireAdmin, async function(
+router.patch('/:username', authUser, requireLogin, ensureAdminOrCorrectUser, async function(
   req,
   res,
   next

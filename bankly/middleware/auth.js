@@ -3,34 +3,6 @@
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../config');
 
-/** Authorization Middleware: Requires user is logged in. */
-
-function requireLogin(req, res, next) {
-  try {
-    if (req.curr_username) {
-      return next();
-    } else {
-      return next({ status: 401, message: 'Unauthorized 1' });
-    }
-  } catch (err) {
-    return next(err);
-  }
-}
-
-/** Authorization Middleware: Requires user is logged in and is staff. */
-
-function requireAdmin(req, res, next) {
-  try {
-    if (req.curr_admin) {
-      return next();
-    } else {
-      return next({ status: 401, message: 'Unauthorized 2' });
-    }
-  } catch (err) {
-    return next(err);
-  }
-}
-
 /** Authentication Middleware: put user on request
  *
  * If there is a token, verify it, get payload (username/admin),
@@ -59,8 +31,52 @@ function authUser(req, res, next) {
   }
 } // end
 
+
+/** Authorization Middleware: Requires user is logged in. */
+
+function requireLogin(req, res, next) {
+  try {
+    if (req.curr_username) {
+      return next();
+    } else {
+      return next({ status: 401, message: 'Unauthorized 1' });
+    }
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/** Authorization Middleware: Requires user is logged in and is staff. */
+
+function requireAdmin(req, res, next) {
+  try {
+    if (req.curr_admin) {
+      return next();
+    } else {
+      return next({ status: 401, message: 'Unauthorized 2' });
+    }
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/** Authentication Middleware: Requires either admin status or that the user's username is the same username provided as route param.
+ */
+
+function ensureAdminOrCorrectUser(req, res, next) {
+  try {
+    if (!(req.curr_admin || req.curr_username === req.params.username)) {
+      return next({ status: 401, message: 'Unauthorized 3' });
+    }
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 module.exports = {
   requireLogin,
   requireAdmin,
+  ensureAdminOrCorrectUser,
   authUser
 };

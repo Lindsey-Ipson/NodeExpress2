@@ -23,7 +23,7 @@ router.post('/register', async function(req, res, next) {
 
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      throw new ExpressError(errs, 400);
+      return next({ status: 400, message: 'Invalid data' });
     }
 
     const { username, password, first_name, last_name, email, phone } = req.body;
@@ -51,7 +51,6 @@ router.post('/login', async function(req, res, next) {
     const { username, password } = req.body;
     // Fixes bug #5 - User.authenticate was not awaited and returning a promise pending
     let user = await User.authenticate(username, password);
-    console.log('user llll', user);
     const token = createTokenForUser(username, user.admin);
     return res.json({ token });
   } catch (err) {
