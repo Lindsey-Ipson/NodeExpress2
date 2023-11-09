@@ -10,7 +10,7 @@ function requireLogin(req, res, next) {
     if (req.curr_username) {
       return next();
     } else {
-      return next({ status: 401, message: 'Unauthorized' });
+      return next({ status: 401, message: 'Unauthorized 1' });
     }
   } catch (err) {
     return next(err);
@@ -24,7 +24,7 @@ function requireAdmin(req, res, next) {
     if (req.curr_admin) {
       return next();
     } else {
-      return next({ status: 401, message: 'Unauthorized' });
+      return next({ status: 401, message: 'Unauthorized 2' });
     }
   } catch (err) {
     return next(err);

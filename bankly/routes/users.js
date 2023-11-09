@@ -70,13 +70,12 @@ router.patch('/:username', authUser, requireLogin, requireAdmin, async function(
 ) {
   try {
     if (!req.curr_admin && req.curr_username !== req.params.username) {
-      throw new ExpressError('Only  that user or admin can edit a user.', 401);
+      throw new ExpressError('Only that user or admin can edit a user.', 401);
     }
-
     // get fields to change; remove token so we don't try to change it
     let fields = { ...req.body };
     delete fields._token;
-
+    // Fix bug #2 - User.update was not awaited and returning a promise pending when updating user
     let user = await User.update(req.params.username, fields);
     return res.json({ user });
   } catch (err) {

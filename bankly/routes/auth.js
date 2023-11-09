@@ -4,6 +4,8 @@ const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const createTokenForUser = require('../helpers/createToken');
+const jsonschema = require("jsonschema");
+const userRegisterSchema = require("../schemas/userRegister.json");
 
 
 /** Register user; return token.
@@ -16,7 +18,16 @@ const createTokenForUser = require('../helpers/createToken');
 
 router.post('/register', async function(req, res, next) {
   try {
+    // Fix bug #1 - no data validation for registering users - add JSON schema validation for new user registration
+    const validator = jsonschema.validate(req.body, userRegisterSchema);
+
+    if (!validator.valid) {
+      const errs = validator.errors.map(e => e.stack);
+      throw new ExpressError(errs, 400);
+    }
+
     const { username, password, first_name, last_name, email, phone } = req.body;
+
     let user = await User.register({username, password, first_name, last_name, email, phone});
     const token = createTokenForUser(username, user.admin);
     return res.status(201).json({ token });
@@ -38,7 +49,9 @@ router.post('/register', async function(req, res, next) {
 router.post('/login', async function(req, res, next) {
   try {
     const { username, password } = req.body;
-    let user = User.authenticate(username, password);
+    // Fixes bug #5 - User.authenticate was not awaited and returning a promise pending
+    let user = await User.authenticate(username, password);
+    console.log('user llll', user);
     const token = createTokenForUser(username, user.admin);
     return res.json({ token });
   } catch (err) {
