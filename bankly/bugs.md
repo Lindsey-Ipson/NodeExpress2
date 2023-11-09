@@ -4,13 +4,19 @@
 
 There is no JSON validation when users register. Therefore, invalid or incomplete data may be added to the database
 
+Added a userRegister JSON schema to validate potential new user data before being added to database
+
 ## Bug #2
 
 There is no JSON validation when users/admins try to update users. Therefore, user info in the database can be changed to be invalid or incomplete and any column can be updated, not just the columns meant to be updated
 
+Added a userUpdate JSON schema to validate potential changes to users' first names, last names, emails, and phones, and disallowing changes to username or password
+
 ## Bug #3
 
-The SQL Update query is returning *, which can lead to security breaches as if any sensitive columns are added to use user table later on, this may be available to users
+The SQL Update query (within function sqlForPartialUpdate) is returning *, which can lead to security breaches as if any sensitive columns are added to use user table later on, this may be available to users
+
+Changed the `RETURNING *` line to `RETURNING username`
 
 ## Bug #4
 
