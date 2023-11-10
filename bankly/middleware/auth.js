@@ -30,8 +30,7 @@ function authUser(req, res, next) {
     err.status = 401;
     return next(err);
   }
-} // end
-
+}
 
 /** Authorization Middleware: Requires user is logged in. */
 

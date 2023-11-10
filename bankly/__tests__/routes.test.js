@@ -78,7 +78,7 @@ describe("POST /auth/register", function() {
     });
   });
 
-  // added for bug #1
+  // Tests bug #1
   test("should not allow a user to register with missing fields", async function() {
     const response = await request(app)
       .post("/auth/register")
@@ -90,7 +90,7 @@ describe("POST /auth/register", function() {
     expect(response.statusCode).toBe(400);
   });
 
-    // added for bug #1
+    // Tests bug #1
   test("should not allow a user to register with invalid data types", async function() {
     const response = await request(app)
       .post("/auth/register")
@@ -121,7 +121,7 @@ describe("POST /auth/login", function() {
     expect(username).toBe("u1");
     expect(admin).toBe(false);
   });
-  // added for bug #5
+  // Tests bug #5
   test("should not allow an incorrect username/password to log in", async function() {
     const response = await request(app)
       .post("/auth/login")
@@ -198,7 +198,7 @@ describe("PATCH /users/[username]", function() {
     });
   });
 
-    // added for bug #4
+    // Tests bug #4
   test("should patch data if correct user", async function() {
     const response = await request(app)
       .patch("/users/u1")
@@ -215,7 +215,7 @@ describe("PATCH /users/[username]", function() {
     });
   });
 
-  // added for bug #2
+  // Tests bug #2
   test("should disallow patching not-allowed-fields", async function() {
     const response = await request(app)
       .patch("/users/u1")
@@ -230,7 +230,7 @@ describe("PATCH /users/[username]", function() {
     expect(response.statusCode).toBe(404);
   });
 
-    // added for bug #2
+    // Tests bug #2
   test("should return 400 if invalid data", async function() {
     const response = await request(app)
       .patch("/users/u1")
@@ -238,7 +238,7 @@ describe("PATCH /users/[username]", function() {
     expect(response.statusCode).toBe(400);
   });
 
-    // added for bug #2
+    // Tests bug #2
   test("should return 400 if invalid data types", async function() {
     const response = await request(app)
       .patch("/users/u1")
@@ -246,7 +246,7 @@ describe("PATCH /users/[username]", function() {
     expect(response.statusCode).toBe(400);
   });
 
-    // added for bug #2
+    // Tests bug #2
   test("should return 400 for empty data", async function() {
     const response = await request(app)
       .patch("/users/u1")
@@ -254,7 +254,7 @@ describe("PATCH /users/[username]", function() {
     expect(response.statusCode).toBe(400);
   });
 
-    // added for bug #2
+    // Tests bug #2
   test("should return 400 for extra data", async function() {
     const response = await request(app)
       .patch("/users/u1")
