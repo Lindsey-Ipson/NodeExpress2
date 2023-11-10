@@ -28,7 +28,7 @@ In the login route in auth.js, User Authenticate is not awaited, therefore user 
 
 ## Bug #6
 
-
+In the function authUser, the jwt is not being verified; it is simply being decoded.
 
 
 
