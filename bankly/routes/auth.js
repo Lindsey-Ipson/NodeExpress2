@@ -23,7 +23,7 @@ router.post('/register', async function(req, res, next) {
 
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      return next({ status: 400, message: 'Invalid data' });
+      return next({ status: 400, message: `Invalid data: ${errs}` });
     }
 
     const { username, password, first_name, last_name, email, phone } = req.body;

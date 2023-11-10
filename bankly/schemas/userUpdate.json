@@ -27,9 +27,8 @@
           "maxLength": 15
       }
   },
+  "additionalProperties": false,
   "examples": [{
-      "username": "user1",
-      "password": "password123",
       "first_name": "Fname",
       "last_name": "Lname",
       "email": "user1@email.com",

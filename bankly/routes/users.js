@@ -72,7 +72,7 @@ router.patch('/:username', authUser, requireLogin, ensureAdminOrCorrectUser, asy
 ) {
   try {
     if (!req.curr_admin && req.curr_username !== req.params.username) {
-      throw new ExpressError('Only that user or admin can edit a user.', 401);
+      throw new ExpressError('Only that user or admin can edit a user.', 401); 
     }
     // get fields to change; remove token so we don't try to change it
     let fields = { ...req.body };

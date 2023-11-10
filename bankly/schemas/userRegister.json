@@ -19,7 +19,7 @@
       },
       "password": {
           "type": "string",
-          "minLength": 5,
+          "minLength": 3,
           "maxLength": 20
       },
       "first_name": {
@@ -44,6 +44,7 @@
           "maxLength": 15
       }
   },
+  "additionalProperties": false,
   "examples": [{
       "username": "user1",
       "password": "password123",

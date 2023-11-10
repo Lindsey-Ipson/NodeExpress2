@@ -161,11 +161,11 @@ describe("PATCH /users/[username]", function() {
     });
   });
 
-  test("should disallowing patching not-allowed-fields", async function() {
+  test("should disallow patching not-allowed-fields", async function() {
     const response = await request(app)
       .patch("/users/u1")
       .send({ _token: tokens.u1, admin: true });
-    expect(response.statusCode).toBe(401);
+    expect(response.statusCode).toBe(400);
   });
 
   test("should return 404 if cannot find", async function() {
