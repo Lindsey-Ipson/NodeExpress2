@@ -7,6 +7,8 @@ const createTokenForUser = require('../helpers/createToken');
 const jsonschema = require("jsonschema");
 const userRegisterSchema = require("../schemas/userRegister.json");
 
+const jwt = require("jsonwebtoken");
+
 
 /** Register user; return token.
  *
@@ -50,8 +52,19 @@ router.post('/login', async function(req, res, next) {
   try {
     const { username, password } = req.body;
     // Fixes bug #5 - User.authenticate was not awaited and returning a promise pending
+    // let user = User.authenticate(username, password);
     let user = await User.authenticate(username, password);
-    const token = createTokenForUser(username, user.admin);
+ 
+
+    console.log(user);
+
+    // const token = createTokenForUser(username, user.admin);
+    const token = createTokenForUser(user.username, user.admin);
+
+    console.log(token);
+
+    console.log(jwt.decode(token));
+
     return res.json({ token });
   } catch (err) {
     return next(err);
@@ -59,3 +72,17 @@ router.post('/login', async function(req, res, next) {
 }); // end
 
 module.exports = router;
+
+
+
+
+
+
+
+
+/** return signed JWT for payload {username, admin}. */
+
+function createToken(username, admin=false) {
+  let payload = {username, admin};
+  return jwt.sign(payload, SECRET_KEY);
+}

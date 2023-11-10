@@ -24,23 +24,26 @@ The user patch route is only allowing admins to update user info, when users are
 
 ## Bug #5
 
-In the login route in auth.js, User Authenticate is not awaited, therefore user is made to equal a promise pending
+In the login route in auth.js, User Authenticate is not awaited, therefore user is made to equal a promise pending. Also, the token is set to equal `createTokenForUser(username, user.admin);`. However, the username is not authenticated at this point; it is simply coming from req.body (`const { username, password } = req.body;`). To fix this, the token should be set to equal `createTokenForUser(user.username, user.admin);`.
+
+Changed 
+
+```
+const { username, password } = req.body;
+let user = User.authenticate(username, password);
+const token = createTokenForUser(username, user.admin);
+```
+
+to
+
+```
+const { username, password } = req.body;
+let user = await User.authenticate(username, password);
+const token = createTokenForUser(user.username, user.admin);
+```
 
 ## Bug #6
 
 In the function authUser, the jwt is not being verified; it is simply being decoded.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Changed `let payload = jwt.decode(token);` to `let payload = jwt.verify(token, SECRET_KEY);`
